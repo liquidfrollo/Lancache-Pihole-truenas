@@ -9,7 +9,7 @@ GITSYNCDIR=/home/cache-domains
 DNSMASQCONFIG=/home/config.json
 
 # Create a new, random temp directory and make sure it was created, else exit
-TEMPDIR=$(/tmp/tmpdata)
+TEMPDIR=$(mktemp -d)
 
   if [ ! -e $TEMPDIR ]; then
       >&2 echo "Failed to create temp directory"

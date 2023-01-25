@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ### Set variables, change as necessary ###
-# Username of the regular user you're using
-SYSTEMUSER=$(logname)
+# Username of the regular user you're using (not needed with k3s)
+#SYSTEMUSER=$(logname)
 # Directory the git repository is synced to
-GITSYNCDIR=/home/$SYSTEMUSER/cache-domains
+GITSYNCDIR=/home/cache-domains
 # Your personalized config file from "Setting up our config.json file" step
-DNSMASQCONFIG=/home/$SYSTEMUSER/config.json
+DNSMASQCONFIG=/home/config.json
 
 # Create a new, random temp directory and make sure it was created, else exit
-TEMPDIR=$(mktemp -d)
+TEMPDIR=$(/tmp/tmpdata)
 
   if [ ! -e $TEMPDIR ]; then
       >&2 echo "Failed to create temp directory"
@@ -39,7 +39,7 @@ cd $TEMPDIR/scripts/ && \
 cp -r $TEMPDIR/scripts/output/dnsmasq/*.conf /etc/dnsmasq.d/
 
 # Restart pihole-FTL or docker
-if systemctl is-active --quiet pihole-FTL ; then
+if service pihole-FTL status ; then
   sudo service pihole-FTL restart
 elif sudo docker ps -a | grep -o "pihole" > /dev/null 2>&1 ; then
   sudo docker restart pihole > /dev/null 2>&1

@@ -8,7 +8,7 @@ if [ "$(id -un)" != "root" ]; then
     exit
 fi
 
-if !( systemctl is-active --quiet pihole-FTL || sudo docker ps -a | grep -o "pihole" > /dev/null 2>&1 ); then
+if !( service pihole-FTL status || sudo docker ps -a | grep -o "pihole" > /dev/null 2>&1 ); then
   echo " "
   echo " Pihole is currently not installed on this system."
   echo " Install Pihole (https://pi-hole.net/) before running this script."
@@ -27,7 +27,8 @@ cd /home/$(logname)
 git clone https://github.com//uklans/cache-domains > /dev/null 2>&1
 
 #Get host ip address
-Hostip="""$(hostname -I | sed -r 's/[^], :[]+/"&"/g')"""
+#Hostip="""$(hostname -I | sed -r 's/[^], :[]+/"&"/g')"""
+Hostip="""172.16.1.39""" #This should be the internal Lancache monolithic container ip
 
 #Setting up config.json file
 {
